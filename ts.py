@@ -18,3 +18,10 @@ dflog =df['DJIA'].apply(lambda x: log(x))
 
 dflog.plot(title = 'DJIA entre Mai 1885 et Mars 2017 (échelle logarithmique)') 
 plt.show()
+
+
+yearlyvar = pd.DataFrame()
+yearlyvar = df.resample('A').mean()
+yearlyvar=yearlyvar.pct_change()
+yearlyvar.plot(title = 'Mean Annual DJIA Variation')
+plt.show()
