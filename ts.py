@@ -6,12 +6,15 @@ from math import *
 df = pd.read_csv('DJA.csv',parse_dates=[0])
 df.index = df['Date']
 del df['Date']
+
 print (df)
+print(df.describe())
+
+
 df.plot(title = 'DJIA entre Mai 1885 et Mars 2017')
 plt.show()
 
 dflog =df['DJIA'].apply(lambda x: log(x))
 
-dflog.plot(title = 'DJIA entre Mai 1885 et Mars 2017 (échelle logarithmique)')
-plt.figure(num=None, figsize=(5, 10), dpi=80, facecolor='y', edgecolor='k')  
+dflog.plot(title = 'DJIA entre Mai 1885 et Mars 2017 (échelle logarithmique)') 
 plt.show()
