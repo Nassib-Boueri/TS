@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.tools.plotting import autocorrelation_plot
 import numpy as np
 import matplotlib.pyplot as plt
 from math import *
@@ -21,7 +22,10 @@ plt.show()
 
 
 yearlyvar = pd.DataFrame()
-yearlyvar = df.resample('A').mean()
-yearlyvar=yearlyvar.pct_change()
+yearlyvar = (df.resample('A').mean())
+yearlyvar=(yearlyvar.pct_change()).dropna()
 yearlyvar.plot(title = 'Mean Annual DJIA Variation')
+plt.show()
+
+autocorrelation_plot(yearlyvar)
 plt.show()
