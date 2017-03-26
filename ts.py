@@ -29,3 +29,7 @@ plt.show()
 
 autocorrelation_plot(yearlyvar)
 plt.show()
+
+yearlyvar.describe()
+yearlyvar.skew()
+yearlyvar.kurtosis() #Attention, il s'agit de l'excess kurtosis (-3)
