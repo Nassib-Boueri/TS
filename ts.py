@@ -68,8 +68,8 @@ index= np.asarray(monthly.index)
 
 temp=[]
 vol=[]
-for i in range(1571):
-    res1 = garch11.fit(first_obs=1570-i, last_obs=1582, disp='off')
+for i in range(1567):
+    res1 = garch11.fit(first_obs=1566-i, last_obs=1578, disp='off')
     print(res1.rsquared)
     temp.append(np.asarray(res1.params))
     vol.append(np.sqrt((np.asarray(res1.forecast(horizon=12).variance)[-1,:]).sum())/100)
@@ -79,50 +79,66 @@ temp = pd.DataFrame(np.asarray(temp))
 temp.columns = ['mu','omega','alpha','beta']
 del temp['mu']
 del temp['omega']
-temp = temp.set_index(np.flip(index[:-12],axis=0))
+
 
 temp.plot()
 plt.show()
 
 vol = pd.DataFrame(np.asarray(vol))
 vol.columns = ['volatilité prédite à 12 mois']
+#vol = vol.set_index(np.flip(index[:-16],axis=0))
 vol.plot()
 plt.show()
 
 VaR = 1 -np.exp(-1.65*np.asarray(vol))  
 VaR = pd.DataFrame(np.asarray(VaR))
 VaR.columns = ['VaR à 95 %']
-VaR = VaR.set_index(np.flip(index[:-12],axis=0))
+#VaR = VaR.set_index(np.flip(index[:-16],axis=0))
 VaR.plot()
 plt.show()
 
 
 temp2=[]
 vol2=[]
-for i in range(1083):
+for i in range(1079):
     res2 = garch11.fit(first_obs=i, last_obs=500+i, disp='off')
     print(res2.rsquared)
     temp2.append(np.asarray(res2.params))
-    vol2.append(np.sqrt((np.asarray(res2.forecast(horizon=12).variance)[500+i,:]).sum())/100)
+    vol2.append(np.sqrt((np.asarray(res2.forecast(horizon=12).variance)[499+i,:]).sum())/100)
     print(i)
     
 temp2 = pd.DataFrame(np.asarray(temp2))
 temp2.columns = ['mu','omega','alpha','beta']
 del temp2['mu']
 del temp2['omega']
-temp2 = temp2.set_index(index[500:])
+temp2 = temp2.set_index(index[500:-4])
 temp2.plot()
 plt.show()
 
 VaR2 = 1 -np.exp(-1.65*np.asarray(vol2))  
 VaR2 = pd.DataFrame(np.asarray(VaR2))
 VaR2.columns = ['VaR roulante à 95% à un an']
-VaR2 = VaR2.set_index(index[500:])
+VaR2 = VaR2.set_index(index[500:-4])
 VaR2.plot()
 plt.show()
 
 
+casual = monthlyvar
+yearlyvar2 = monthlyvar - monthlyvar
+for i in range (12):
+    yearlyvar2 = yearlyvar2 + casual
+    casual = casual.shift()
 
+
+yearlyvar2= np.exp(yearlyvar2)-1
+
+yearlyvar2 = (np.sqrt(yearlyvar2**2)-yearlyvar2)/2 
+indexyearlyvar2 = np.asarray(yearlyvar2.index)
+yearlyvar2 = pd.DataFrame(np.asarray(yearlyvar2)[500:])
+yearlyvar2 = yearlyvar2.set_index(indexyearlyvar2[500:])
+yearlyvar2.columns = ['Pertes du DJIA sur 12 mois roulants']
+yearlyvar2.plot()
+plt.show()
 
 
 
